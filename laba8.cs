@@ -217,10 +217,9 @@ class Task_13 : Task
         Dictionary<char, double> Persent = new Dictionary<char, double>();
         foreach (var b in Bukva)
         {
-            Persent[b.Key] = CountPersent(Convert.ToInt32(b.Value), Bukva.Count);
+            Persent[b.Key] = CountPersent(Convert.ToInt32(b.Value), slova.Length);
             result += b.Key + " " + Persent[b.Key] + "\n";
         }
-
     }
 }
 
