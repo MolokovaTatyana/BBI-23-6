@@ -1,0 +1,64 @@
+using System;
+using System.Reflection.Metadata.Ecma335;
+using System.Text.RegularExpressions;
+abstract class Task
+{
+    protected string result;
+    public Task(string text) { }
+    protected abstract void ParseText(string text);
+    protected virtual int Count()
+    {
+        return -1;
+    }
+    protected double CountPersent(int number, int total)
+    {
+        return (double)number / (double)total * 100;
+    }
+    protected Dictionary<string, char> special_pairs = new Dictionary<string, char>();
+
+}
+
+class Task_15 : Task
+{
+    private decimal sum = 0;
+    public Task_15(string text) : base(text)
+    {
+        ParseText(text);
+    }
+    public override string ToString()
+    {
+        return "Сумма равнa: " + sum;
+    }
+    protected override void ParseText(string text)
+    {
+        string[] slova = text.Split();
+        foreach (string slovo in slova)
+        {
+            for (int i = 0; i < slovo.Length; i++)
+            {
+                string numbers = "";
+                while (i < slovo.Length && (char.IsDigit(slovo[i]) | (slovo[i] == ',' && (i != slovo.Length - 1 && char.IsDigit(slovo[i + 1])) && numbers.Count(f => (f == ',')) == 0) | (slovo[i] == '-' && numbers.Count(f => (f == '-')) == 0 && char.IsDigit(slovo[i + 1]))))
+                {
+                    numbers += slovo[i];
+                    i++;
+                }
+                if (numbers.Length > 0)
+                {
+                    sum += decimal.Parse(numbers);
+                }
+            }
+        }
+    }
+
+}
+
+
+class Program
+{
+    public static void Main()
+    {
+        string text = ("Первое кругосветное путешествие -8 было осуществлено флотом, возглавляемым португальским исследователем Фернаном Магелланом. Путешествие началось 20 сентября 1519 года, когда флот, состоящий из пяти кораблей и примерно 270,8 человек, отправился из порту Сан-Лукас в Испании. Хотя Магеллан не закончил свое путешествие из-за гибели в битве на Филиппинах в -1521 году, его экспедиция стала первой, которая успешно обогнула Землю и доказала ее круглую форму. Это путешествие открыло новые морские пути и имело огромное значение для картографии и географических открытий.");
+        Task_15 task15 = new Task_15(text);
+        Console.WriteLine(task15);
+    }
+}
